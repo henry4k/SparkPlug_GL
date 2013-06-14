@@ -1,12 +1,12 @@
-AddModule(${ModulePrefix}GL)
-TARGET_LINK_LIBRARIES(${ModulePrefix}GL ${ModulePrefix}Common)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-RequiredPackage(OpenGL)
-	AddIncludeDirs(${ModulePrefix}GL ${OPENGL_INCLUDE_DIR})
-	TARGET_LINK_LIBRARIES(${ModulePrefix}GL ${OPENGL_gl_LIBRARY})
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
-RequiredPackage(GLEW)
-	AddIncludeDirs(${ModulePrefix}GL ${GLEW_INCLUDE_DIR})
-	TARGET_LINK_LIBRARIES(${ModulePrefix}GL ${GLEW_LIBRARIES})
+INCLUDE("CxxFlags")
+SET(CMAKE_CXX_FLAGS "${STRICT_CXX_FLAGS}")
 
-InstallModule(${ModulePrefix}GL)
+PROJECT("SparkPlug_GL" C CXX)
+
+OPTION(BUILD_SHARED_LIBS "Build modules as shared libraries?" OFF)
+
+ADD_SUBDIRECTORY("Source")
