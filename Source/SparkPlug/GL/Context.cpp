@@ -341,7 +341,7 @@ void Context::setVertexFormat( const VertexFormat& format, void* data )
 	for(int i = 0; i < formatAttributeCount; ++i)
 	{
 		const VertexAttribute& newAttribute = format.attribute(i);
-		if(m_Attributes[i] != newAttribute) // TODO: GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING und so
+		//if(m_Attributes[i] != newAttribute) // TODO: GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING und so
 		{
 			m_Attributes[i] = newAttribute;
 
