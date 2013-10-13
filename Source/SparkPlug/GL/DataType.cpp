@@ -281,7 +281,7 @@ void DataType::setByDef( const char* def, int length )
 		}
 	}
 
-	if(mode == 1 && buf.size() == 1)
+	if(mode == 0 && buf.size() == 1)
 	{
 		m_CompositeDataType = CompositeDataType_None;
 		m_CompositeSize = 1;

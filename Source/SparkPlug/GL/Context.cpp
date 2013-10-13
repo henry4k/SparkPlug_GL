@@ -412,7 +412,7 @@ void Context::enableDebug( bool e )
 		{
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 			glDebugMessageCallbackARB(Context::onDebugEventWrapper, this);
-			LogWarning("ARB_debug_output supported! You may receive debug messages from your OpenGL driver.");
+			Log("ARB_debug_output supported! You may receive debug messages from your OpenGL driver.");
 		}
 		else
 		{
