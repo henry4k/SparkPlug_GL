@@ -1,3 +1,4 @@
+#include <cstring>
 #include <SparkPlug/Common.h>
 #include <SparkPlug/GL/Context.h>
 

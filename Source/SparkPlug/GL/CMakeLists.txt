@@ -27,7 +27,7 @@ INSTALL(TARGETS sparkplug-gl
 if(UNIX)
     SET(PKG_DEPS "sparkplug-core >= ${VERSION}, gl, glew")
     SET(PKG_LIBS "")
-    SET(LIB_NAME "sparkplug-gl.${VERSION}")
+    SET(LIB_NAME "sparkplug-gl")
 
     CONFIGURE_FILE(
         ${CMAKE_SOURCE_DIR}/sparkplug-gl.pc.in

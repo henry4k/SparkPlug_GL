@@ -1,7 +1,6 @@
 #ifndef __SPARKPLUG_TEXTURE__
 #define __SPARKPLUG_TEXTURE__ 
 
-#include <SparkPlug/Vector.h>
 #include <SparkPlug/Reference.h>
 #include <SparkPlug/GL/OpenGL.h>
 #include <SparkPlug/GL/Enums.h>
@@ -53,20 +52,20 @@ public:
 	bool hasMipMaps() const;
 	int mipMapLevels() const;
 	
-// 	vec3i size( int mipMapLevel = 0 ) const;
-	
 	void setFilter( TextureFilter f );
 	void setAddressMode( TextureAddressMode m );
 	void setMaxAnisotropic( float level );
 	
 private:
 	Texture( Context* context, TextureType type );
-	static bool UploadTextureRaw( TextureType type, bool proxy, int level, const PixelFormat& format, bool sRGB, vec3i size, bool border, const void* data );
-	static bool TestTextureCreation( TextureType type, vec3i size, PixelFormat format, bool sRGB );
+	static bool UploadTextureRaw( TextureType type, bool proxy, int level, const PixelFormat& format, bool sRGB, int width, int height, int depth, bool border, const void* data );
+	static bool TestTextureCreation( TextureType type, int width, int height, int depth, PixelFormat format, bool sRGB );
 	
 	TextureType m_Type;
 	int         m_MipMapLevels;
-	vec3i       m_Size;
+	int         m_Width;
+	int			m_Height;
+    int			m_Depth;
 };
 
 }

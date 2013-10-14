@@ -359,7 +359,7 @@ IndexBuffer::IndexBuffer( Context* context, int count, BufferUsage usage, IndexT
 /// ---- PixelBuffer ----
 
 /*
-StrongRef<PixelBuffer> PixelBuffer::Create( Context* context, const PixelFormat& format, vec3i size )
+StrongRef<PixelBuffer> PixelBuffer::Create( Context* context, const PixelFormat& format, int width, int height, int depth )
 {
 	return new PixelBuffer(context, format, size);
 }
@@ -374,10 +374,12 @@ StrongRef<PixelFormat> PixelBuffer::CreateFromImage( Context* context, const Ima
 
 // TODO: Hier BufferUsage auf PixelPack/Unpack beschränken!
 // Entweder durch Laufzeit-Prüfung mit assert() o.Ä. oder mit einem eigenem Enum (ein bool ist blöd)
-PixelBuffer::PixelBuffer( Context* context, BufferTarget target, BufferUsage usage, const PixelFormat& format, vec3i size ) :
-	Buffer(context, target, usage, size.volume(), format.pixelSize()),
+PixelBuffer::PixelBuffer( Context* context, BufferTarget target, BufferUsage usage, const PixelFormat& format, int width, int height, int depth ) :
+	Buffer(context, target, usage, width*height*depth, format.pixelSize()),
 	m_Format(format),
-	m_Size(size)
+	m_Width(width),
+	m_Height(height),
+	m_Depth(depth)
 {
 	switch(target)
 	{
@@ -394,9 +396,19 @@ const PixelFormat& PixelBuffer::format() const
 	return m_Format;
 }
 
-vec3i PixelBuffer::size() const
+int PixelBuffer::width() const
 {
-	return m_Size;
+	return m_Width;
+}
+
+int PixelBuffer::height() const
+{
+	return m_Height;
+}
+
+int PixelBuffer::depth() const
+{
+	return m_Depth;
 }
 
 

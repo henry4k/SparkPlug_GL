@@ -42,19 +42,7 @@ void SamplerBase::setMaxAnisotropic( float level )
 	m_MaxAnisotropic = level;
 }
 
-// vec3i ConvertImageToTextureSize( TextureType type, vec3i imageSize )
-// {
-// 	switch(type)
-// 	{
-// 		case TextureType_1D:
-// 		{
-// 			assert((imageSize.x >= 1) && (imageSize.y == 1) && (imageSize.z == 1));
-// 			
-// 		}
-// 	}
-// }
-
-bool Texture::UploadTextureRaw( TextureType type, bool proxy, int level, const PixelFormat& format, bool sRGB, vec3i size, bool border, const void* data )
+bool Texture::UploadTextureRaw( TextureType type, bool proxy, int level, const PixelFormat& format, bool sRGB, int width, int height, int depth, bool border, const void* data )
 {
 	GLenum typeGL   = proxy ? ConvertToProxyGL(type) : ConvertToGL(type);
 	GLenum formatGL = ConvertToGL(format, sRGB);
@@ -65,37 +53,37 @@ bool Texture::UploadTextureRaw( TextureType type, bool proxy, int level, const P
 	switch(type)
 	{
 		case TextureType_1D:
-			glTexImage1D(typeGL, level, formatGL, size.x, borderGL, semanticGL, componentTypeGL, data);
+			glTexImage1D(typeGL, level, formatGL, width, borderGL, semanticGL, componentTypeGL, data);
 			break;
 		
 		case TextureType_3D:
-			glTexImage3D(typeGL, level, formatGL, size.x, size.y, size.z, borderGL, semanticGL, componentTypeGL, data);
+			glTexImage3D(typeGL, level, formatGL, width, height, depth, borderGL, semanticGL, componentTypeGL, data);
 			break;
 		
 		case TextureType_2D:
 		case TextureType_Rect:
 		case TextureType_CubeMap:
-			glTexImage2D(typeGL, level, formatGL, size.x, size.y, borderGL, semanticGL, componentTypeGL, data);
+			glTexImage2D(typeGL, level, formatGL, width, height, borderGL, semanticGL, componentTypeGL, data);
 			break;
 		
 		default:
 			FatalError("Invalid texture type: %u", type);
 	}
 	
-	GLint width;
-	glGetTexLevelParameteriv(typeGL, 0, GL_TEXTURE_WIDTH, &width);
+	GLint realWidth;
+	glGetTexLevelParameteriv(typeGL, 0, GL_TEXTURE_WIDTH, &realWidth);
 	
-	if(width == 0)
+	if(realWidth == 0)
 	{
 		LogError("Cannot create %s texture:", AsString(type));
-		LogError("Size: %d, %d, %d", size.x, size.y, size.z);
+		LogError("Size: %d, %d, %d", width, height, depth);
 		LogError("Format: %s (sRGB=%d)", format.asString().c_str(), (int)sRGB);
 		return false;
 	}
 	return true;
 }
 
-bool Texture::TestTextureCreation( TextureType type, vec3i size, PixelFormat format, bool sRGB )
+bool Texture::TestTextureCreation( TextureType type, int width, int height, int depth, PixelFormat format, bool sRGB )
 {
 	return UploadTextureRaw(
 			type,
@@ -103,7 +91,7 @@ bool Texture::TestTextureCreation( TextureType type, vec3i size, PixelFormat for
 			0,    // level
 			format,
 			sRGB,
-			size,
+			width, height, depth,
 			false, // border
 			NULL
 	);
@@ -123,7 +111,7 @@ StrongRef<Texture> Texture::CreateFromImage( Context* context, TextureType type,
 	
 	TextureBinding binding(context, context->activeTextureUnit(), texture);
 	
-	if(!TestTextureCreation(type, image.size(), image.format(), sRGB))
+	if(!TestTextureCreation(type, image.width(), image.height(), image.depth(), image.format(), sRGB))
 	{
 		return NULL;
 	}
@@ -137,7 +125,7 @@ StrongRef<Texture> Texture::CreateFromImage( Context* context, TextureType type,
 			0,     // level
 			image.format(),
 			sRGB,
-			image.size(),
+			image.width(), image.height(), image.depth(),
 			border,
 			image.pixels()
 	))
@@ -183,9 +171,9 @@ TextureType Texture::type() const
 bool Texture::isPowerOfTwo() const
 {
 	return
-		((m_Size.x == 0) || IsPowerOfTwo(m_Size.x)) &&
-		((m_Size.y == 0) || IsPowerOfTwo(m_Size.y)) &&
-		((m_Size.z == 0) || IsPowerOfTwo(m_Size.z));
+		((m_Width == 0) || IsPowerOfTwo(m_Width)) &&
+		((m_Height == 0) || IsPowerOfTwo(m_Height)) &&
+		((m_Depth == 0) || IsPowerOfTwo(m_Depth));
 }
 
 bool Texture::hasMipMaps() const

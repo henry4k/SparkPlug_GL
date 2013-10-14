@@ -1,7 +1,6 @@
 #ifndef __SPARKPLUG_GL_BUFFER__
 #define __SPARKPLUG_GL_BUFFER__
 
-#include <SparkPlug/Vector.h>
 #include <SparkPlug/Pixel.h>
 #include <SparkPlug/Image.h>
 #include <SparkPlug/GL/Object.h>
@@ -138,19 +137,23 @@ class PixelBuffer : public Buffer
 {
 public:
 	/*
-	static StrongRef<PixelBuffer> Create( Context* context, const PixelFormat& format, vec3i size );
+	static StrongRef<PixelBuffer> Create( Context* context, const PixelFormat& format, int width, int height, int depth );
 	static StrongRef<PixelBuffer> CreateFromImage( const Image& image );
 	*/
 
 	const PixelFormat& format() const;
-	vec3i size() const;
+	int width() const;
+	int height() const;
+	int depth() const;
 
 private:
-	PixelBuffer( Context* context, BufferTarget target, BufferUsage usage, const PixelFormat& format, vec3i size );
+	PixelBuffer( Context* context, BufferTarget target, BufferUsage usage, const PixelFormat& format, int width, int height, int depth );
 	// TODO: Über PBOs erkundigen .. also was man jetzt genau damit anstellen kann und so. :)
 
 	PixelFormat m_Format;
-	vec3i m_Size;
+	int m_Width;
+	int m_Height;
+	int m_Depth;
 };
 
 
